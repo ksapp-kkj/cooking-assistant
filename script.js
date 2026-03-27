@@ -57,7 +57,7 @@ window.onclick = function(event) {
 function openInfoModal(type) {
     const infos = {
         'menu': { title: '献立選択の使い方', text: 'レシピをクリックして今日の献立に追加します。（複数選択可）<br><br>※現在の在庫で作れる料理には「✨ 今ある在庫で作れます！」のバッジが表示されます。' },
-        'inventory': { title: '食材管理の使い方', text: '現在登録されている全食材の在庫を一覧できます。<br>カテゴリ名をクリックすると開閉します。<br><br>在庫データは保存され、買い物や調理と連動して自動で増減します。在庫数の直接変更や、新しい食材の追加・削除もここから可能です。' },
+        'inventory': { title: '食材管理の使い方', text: '現在登録されている全食材の在庫を一覧できます。<br>カテゴリ名をクリックすると開閉します。<br><br>在庫データは保存され、買い物や調理と連動して自動で増減します。在庫数の直接変更や、新しい食材の追加もここから可能です。<br>※「✏️」ボタンで食材の修正や削除ができます。' },
         'shopping': { title: '買い物リストの使い方', text: 'スーパーでカゴに食材を入れたらチェックをつけ、実際に購入した量を入力してください。<br><br>一番下の「買い物完了」ボタンを押すと、チェックした食材が在庫に自動的に追加されます。' },
         'cooking': { title: '調理画面の使い方', text: '今日の献立の手順を確認しながら調理を進めます。<br><br>調理が終わったら一番下の「調理完了」ボタンを押すことで、使用した食材が在庫から自動的に消費（マイナス）されます。<br>※在庫が足りない場合は完了ボタンが押せません。' },
         'settings': { title: '管理画面の使い方', text: 'アプリの基本データ（単位・食材マスター・レシピマスター）を管理します。<br><br>新しく追加した単位や食材は、レシピ作成時の選択肢として使えるようになります。' }
@@ -67,8 +67,11 @@ function openInfoModal(type) {
     document.getElementById('info-modal').classList.remove('hidden');
 }
 
+// === 食材マスター・在庫の管理 ===
 function openFoodModal(foodName = null) {
     updateModalUnitOptions();
+    const deleteBtn = document.getElementById('modal-food-delete-btn');
+    
     if (foodName) {
         editingFoodIndex = foods.findIndex(f => f.name === foodName);
         const food = foods[editingFoodIndex];
@@ -78,6 +81,7 @@ function openFoodModal(foodName = null) {
         document.getElementById('modal-cooking-unit').value = food.cookingUnit;
         document.getElementById('modal-shopping-unit').value = food.shoppingUnit;
         document.getElementById('modal-food-submit-btn').textContent = '更新する';
+        deleteBtn.classList.remove('hidden'); // 修正時のみ削除ボタン表示
     } else {
         editingFoodIndex = -1;
         document.getElementById('food-modal-title').textContent = '食材の登録';
@@ -86,6 +90,7 @@ function openFoodModal(foodName = null) {
         document.getElementById('modal-cooking-unit').value = '';
         document.getElementById('modal-shopping-unit').value = '';
         document.getElementById('modal-food-submit-btn').textContent = '登録する';
+        deleteBtn.classList.add('hidden'); // 新規登録時は非表示
     }
     document.getElementById('food-modal').classList.remove('hidden');
 }
@@ -96,6 +101,7 @@ function saveFoodFromModal() {
     const cookingUnit = document.getElementById('modal-cooking-unit').value;
     const shoppingUnit = document.getElementById('modal-shopping-unit').value;
     if (!name || !cookingUnit || !shoppingUnit) return alert('「食材名」「単位」はすべて入力してください。');
+    
     if (editingFoodIndex >= 0) {
         const oldName = foods[editingFoodIndex].name;
         if (oldName !== name) {
@@ -114,6 +120,28 @@ function saveFoodFromModal() {
     renderInventory();
     renderShoppingList();
     renderMenuRecipes(); 
+}
+
+// モーダル内からの削除処理
+function deleteFoodFromModal() {
+    if (editingFoodIndex >= 0) {
+        const foodName = foods[editingFoodIndex].name;
+        if(confirm(`「${foodName}」を食材一覧から削除しますか？\n（※在庫データも消去されます）`)) {
+            foods = foods.filter(f => f.name !== foodName);
+            delete inventoryStock[foodName];
+            delete shoppingChecked[foodName];
+            
+            localStorage.setItem('cookingFoods', JSON.stringify(foods));
+            localStorage.setItem('cookingInventoryStock', JSON.stringify(inventoryStock));
+            localStorage.setItem('cookingShoppingChecked', JSON.stringify(shoppingChecked));
+            
+            updateAllRecipeIngredientSelects();
+            renderInventory();
+            renderShoppingList();
+            renderMenuRecipes();
+            closeModal('food-modal');
+        }
+    }
 }
 
 function deleteFoodData(foodName) {
@@ -161,7 +189,7 @@ function renderInventory() {
                     <div class="inventory-grid">
                         <div class="inv-header">食材名</div>
                         <div class="inv-header">在庫</div>
-                        <div class="inv-header">状態（今日の必要量）</div>
+                        <div class="inv-header">今日の必要数</div>
                         <div class="inv-header text-center">操作</div>`;
 
         catFoods.forEach(food => {
@@ -189,8 +217,7 @@ function renderInventory() {
                 </div>
                 <div class="inv-cell cell-status ${rowClass}">${statusHtml}</div>
                 <div class="inv-cell cell-action ${rowClass}">
-                    <button onclick="openFoodModal('${foodName}')" class="modify-btn small-btn">修正</button>
-                    <button onclick="deleteFoodData('${foodName}')" class="delete-btn small-btn">削除</button>
+                    <button onclick="openFoodModal('${foodName}')" class="icon-btn" title="修正">✏️</button>
                 </div>
             `;
         });
