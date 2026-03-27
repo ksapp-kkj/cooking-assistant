@@ -1,21 +1,24 @@
 body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; color: #333; }
 header { background-color: #ff8c00; position: sticky; top: 0; z-index: 100; }
-nav { display: flex; justify-content: space-around; max-width: 800px; margin: 0 auto; }
-.nav-btn { background: none; border: none; color: white; padding: 15px 10px; font-size: 16px; font-weight: bold; cursor: pointer; flex-grow: 1; transition: background-color 0.3s; }
+
+nav { display: flex; width: 100%; max-width: 800px; margin: 0 auto; overflow-x: auto; }
+nav::-webkit-scrollbar { display: none; }
+.nav-btn { flex: 1; background: none; border: none; color: white; padding: 12px 2px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; text-align: center; white-space: nowrap; border-bottom: 4px solid transparent; }
 .nav-btn:hover { background-color: #e07b00; }
 .nav-btn.active { background-color: #cc6f00; border-bottom: 4px solid #fff; }
 
 main { max-width: 800px; margin: 20px auto; padding: 0 15px; background-color: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); min-height: 400px; padding-bottom: 40px; }
 .tab-content { display: none; padding: 20px; }
 .tab-content.active { display: block; }
-h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; display: flex; align-items: center; justify-content: space-between; }
+h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; display: flex; align-items: center; justify-content: space-between; font-size: 1.3em; }
 
-/* ユーティリティクラス（JSやHTMLから移管したスタイル） */
+/* ユーティリティクラス */
 .hidden { display: none !important; }
 .sub-text { font-size: 0.9em; color: #666; }
 .text-center { text-align: center; }
-.mt-10 { margin-top: 10px; }
+.mt-10 { margin-top: 10px !important; }
 .mt-20 { margin-top: 20px; }
+.mb-20 { margin-bottom: 20px; }
 .flex-gap-10 { display: flex; gap: 10px; }
 .flex-1 { flex: 1; }
 .empty-msg { color: #777; }
@@ -40,11 +43,15 @@ h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; dis
 .action-btn:disabled { background-color: #cccccc !important; cursor: not-allowed; opacity: 0.7; }
 .shortcut-btn { background-color: #17a2b8; font-size: 14px; padding: 6px 12px; }
 .shortcut-btn:hover { background-color: #138496; }
-.large-action-btn { width: 100%; padding: 15px; font-size: 1.2em; }
+.large-action-btn { width: 100%; padding: 15px; font-size: 1.1em; font-weight: bold; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 .full-width-btn { width: 100%; padding: 12px; }
 .danger-btn { background-color: #dc3545; }
 .danger-btn:hover:not(:disabled) { background-color: #c82333; }
 .small-btn { padding: 4px 8px; font-size: 11px; }
+
+/* アイコンボタン */
+.icon-btn { background: none; border: none; cursor: pointer; font-size: 18px; padding: 4px; transition: transform 0.2s; display: flex; align-items: center; justify-content: center; }
+.icon-btn:hover { transform: scale(1.2); }
 
 .input-area { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
 .input-area input, .input-area select { flex: 1; min-width: 100px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 15px; background-color: white; box-sizing: border-box; }
@@ -94,15 +101,15 @@ h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; dis
 .cookable-badge { display: inline-block; background-color: #28a745; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
 
 /* モーダル・コンテナ制御用 */
-.action-container { margin-top: 30px; text-align: center; }
-.warning-msg { color: #dc3545; font-weight: bold; margin-bottom: 10px; }
+.action-container { text-align: center; }
+.warning-msg { color: #dc3545; font-weight: bold; margin-bottom: 10px; font-size: 13px; }
 .modal { display: flex; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; }
 .modal-content { background-color: white; padding: 20px; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
 .small-modal { max-width: 400px; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ff8c00; padding-bottom: 10px; margin-bottom: 15px; }
 .modal-header h3 { margin: 0; color: #ff8c00; }
 .close-modal { font-size: 28px; font-weight: bold; color: #aaa; cursor: pointer; line-height: 1; }
-.info-modal-body { line-height: 1.6; color: #444; font-size: 15px; }
+.info-modal-body { line-height: 1.6; color: #444; font-size: 14px; }
 
 /* カテゴリ別 食材管理 */
 .category-details { background: white; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e9ecef; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
@@ -113,15 +120,15 @@ h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; dis
 .category-details[open] .category-summary { border-bottom: 1px solid #ffe8cc; }
 .category-count { color: #aaa; font-size: 0.9em; }
 
-.inventory-grid { display: grid; grid-template-columns: 1.2fr 1.2fr 1.5fr 0.6fr; gap: 8px; align-items: center; padding: 15px; }
-.inv-header { font-weight: bold; color: #ff8c00; border-bottom: 2px solid #ffe8cc; padding-bottom: 5px; font-size: 13px; }
-.inv-cell { padding: 8px 2px; border-bottom: 1px solid #f8f9fa; display: flex; align-items: center; font-size: 14px; }
+.inventory-grid { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr 0.5fr; gap: 5px; align-items: center; padding: 15px 10px; }
+.inv-header { font-weight: bold; color: #ff8c00; border-bottom: 2px solid #ffe8cc; padding-bottom: 5px; font-size: 11px; }
+.inv-cell { padding: 8px 0px; border-bottom: 1px solid #f8f9fa; display: flex; align-items: center; font-size: 13px; }
 .highlight-row { background-color: #fffaf0; }
-.cell-action { justify-content: center; gap: 5px; }
+.cell-action { justify-content: center; gap: 4px; flex-wrap: wrap; }
 .cell-status { line-height: 1.2; }
-.status-text { font-size: 12px; }
-.status-none { color: #aaa; font-size: 12px; }
-.stock-input { width: 50px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; margin-right: 5px; }
+.status-text { font-size: 11px; }
+.status-none { color: #aaa; font-size: 11px; }
+.stock-input { width: 45px; padding: 5px; border: 1px solid #ccc; border-radius: 4px; margin-right: 3px; }
 
 /* 買い物リスト */
 .shopping-item-wrapper { display: flex; flex-direction: column; gap: 8px; }
