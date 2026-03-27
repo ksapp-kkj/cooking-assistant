@@ -22,18 +22,19 @@
         <section id="menu" class="tab-content active">
             <div class="header-with-btn">
                 <h2>献立選択 <span class="info-icon" onclick="openInfoModal('menu')">📝</span></h2>
-                <button onclick="openRecipeModal()" class="action-btn shortcut-btn">＋ レシピ追加</button>
             </div>
-            <p>レシピをクリックして今日の献立に追加します。<br>
-               <span class="sub-text">※現在の在庫で作れる料理にはバッジが表示されます。</span>
-            </p>
+            <div class="action-container mt-10 mb-20">
+                <button onclick="openRecipeModal()" class="action-btn large-action-btn">＋ レシピを追加</button>
+            </div>
             <div id="menu-recipe-list" class="recipe-grid"></div>
         </section>
 
         <section id="inventory" class="tab-content">
             <div class="header-with-btn">
                 <h2>食材管理（在庫） <span class="info-icon" onclick="openInfoModal('inventory')">📝</span></h2>
-                <button onclick="openFoodModal()" class="action-btn shortcut-btn">＋ 食材を追加</button>
+            </div>
+            <div class="action-container mt-10 mb-20">
+                <button onclick="openFoodModal()" class="action-btn large-action-btn">＋ 食材を追加</button>
             </div>
             <div id="inventory-list"></div>
         </section>
@@ -83,7 +84,9 @@
             <div class="settings-group">
                 <div class="header-with-btn">
                     <h3>登録済みレシピ</h3>
-                    <button onclick="openRecipeModal()" class="action-btn">＋ レシピを追加</button>
+                </div>
+                <div class="action-container mt-10 mb-20">
+                    <button onclick="openRecipeModal()" class="action-btn large-action-btn">＋ レシピを追加</button>
                 </div>
                 <ul id="settings-recipe-list" class="item-list"></ul>
             </div>
@@ -149,6 +152,7 @@
                 </div>
                 
                 <button id="modal-food-submit-btn" onclick="saveFoodFromModal()" class="action-btn full-width-btn mt-20">登録する</button>
+                <button id="modal-food-delete-btn" onclick="deleteFoodFromModal()" class="action-btn full-width-btn mt-10 danger-btn hidden">削除する</button>
             </div>
         </div>
     </div>
