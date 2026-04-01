@@ -8,155 +8,254 @@
 </head>
 <body>
 
-    <header>
-        <nav>
-            <button class="nav-btn active" onclick="switchTab('menu')">献立選択</button>
-            <button class="nav-btn" onclick="switchTab('inventory')">食材管理</button>
-            <button class="nav-btn" onclick="switchTab('shopping')">買い物リスト</button>
-            <button class="nav-btn" onclick="switchTab('cooking')">調理</button>
-            <button class="nav-btn" onclick="switchTab('settings')">管理</button>
-        </nav>
-    </header>
-
-    <main>
-        <section id="menu" class="tab-content active">
-            <div class="header-with-btn">
-                <h2>献立選択 <span class="info-icon" onclick="openInfoModal('menu')">📝</span></h2>
-            </div>
-            <div class="action-container mt-10 mb-20">
-                <button onclick="openRecipeModal()" class="action-btn large-action-btn">＋ レシピを追加</button>
-            </div>
-            <div id="menu-recipe-list" class="recipe-grid"></div>
-        </section>
-
-        <section id="inventory" class="tab-content">
-            <div class="header-with-btn">
-                <h2>食材管理（在庫） <span class="info-icon" onclick="openInfoModal('inventory')">📝</span></h2>
-            </div>
-            <div class="action-container mt-10 mb-20">
-                <button onclick="openFoodModal()" class="action-btn large-action-btn">＋ 食材を追加</button>
-            </div>
-            <div id="inventory-list"></div>
-        </section>
-
-        <section id="shopping" class="tab-content">
-            <div class="header-with-btn">
-                <h2>買い物リスト <span class="info-icon" onclick="openInfoModal('shopping')">📝</span></h2>
-            </div>
-            <ul id="shopping-list-container" class="item-list"></ul>
+    <div id="auth-screen" class="full-screen-login hidden">
+        <div class="login-card">
+            <h2 class="login-title mb-20">🍳 料理アシスタント</h2>
             
-            <div id="shopping-complete-container" class="action-container hidden">
-                <button onclick="completeShopping()" class="action-btn large-action-btn">買い物完了（在庫に追加）</button>
-            </div>
-        </section>
-
-        <section id="cooking" class="tab-content">
-            <div class="header-with-btn">
-                <h2>調理 <span class="info-icon" onclick="openInfoModal('cooking')">📝</span></h2>
-            </div>
-            <div id="cooking-recipe-list"></div>
-            
-            <div id="cooking-complete-container" class="action-container hidden">
-                <div id="cooking-warning-msg" class="warning-msg hidden">※在庫が不足しているため、完了できません。</div>
-                <button id="cooking-complete-btn" onclick="completeCooking()" class="action-btn large-action-btn danger-btn">調理完了（在庫から消費）</button>
-            </div>
-        </section>
-
-        <section id="settings" class="tab-content">
-            <div class="header-with-btn">
-                <h2>管理 <span class="info-icon" onclick="openInfoModal('settings')">📝</span></h2>
-            </div>
-            
-            <div class="settings-group">
-                <div class="header-with-btn">
-                    <h3>登録済みの単位</h3>
-                    <button id="edit-unit-btn" onclick="toggleUnitEditMode()" class="edit-btn">編集</button>
+            <div class="auth-section">
+                <p class="login-desc text-center font-bold mb-10">ログイン</p>
+                <div class="input-area vertical-input-area">
+                    <input type="email" id="login-email" placeholder="メールアドレス" class="full-width-input mb-10">
+                    <input type="password" id="login-password" placeholder="パスワード" class="full-width-input mb-10">
+                    <button onclick="loginWithEmail()" class="action-btn large-action-btn">ログイン</button>
                 </div>
-                <div class="input-area">
-                    <input type="text" id="new-unit-input" placeholder="新しい単位 (例: 個, 束)">
-                    <button onclick="addUnit()" class="action-btn">追加</button>
+                <div class="text-center mt-10">
+                    <a href="javascript:void(0)" onclick="resetPassword()" class="reference-link">パスワードを忘れた場合はこちら</a>
                 </div>
-                <ul id="unit-list" class="tag-list"></ul>
             </div>
 
-            <hr class="divider">
+            <hr class="divider margin-y-20">
 
-            <div class="settings-group">
-                <div class="header-with-btn">
-                    <h3>登録済みレシピ</h3>
-                </div>
-                <div class="action-container mt-10 mb-20">
-                    <button onclick="openRecipeModal()" class="action-btn large-action-btn">＋ レシピを追加</button>
-                </div>
-                <ul id="settings-recipe-list" class="item-list"></ul>
-            </div>
-        </section>
-    </main>
-
-    <div id="info-modal" class="modal hidden">
-        <div class="modal-content small-modal">
-            <div class="modal-header">
-                <h3 id="info-modal-title">使い方</h3>
-                <span class="close-modal" onclick="closeModal('info-modal')">&times;</span>
-            </div>
-            <div id="info-modal-body" class="info-modal-body"></div>
-        </div>
-    </div>
-
-    <div id="recipe-modal" class="modal hidden">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title">レシピの登録</h3>
-                <span class="close-modal" onclick="closeModal('recipe-modal')">&times;</span>
-            </div>
-            <div class="recipe-form-card">
-                <input type="text" id="recipe-name-input" placeholder="レシピ名 (例: 肉じゃが)" class="full-width-input">
-                <div class="recipe-section">
-                    <h4>材料</h4>
-                    <div id="recipe-ingredients-container"></div>
-                    <button onclick="addRecipeIngredientRow()" class="add-row-btn">＋ 材料を追加</button>
-                </div>
-                <div class="recipe-section">
-                    <h4>手順</h4>
-                    <div id="recipe-steps-container"></div>
-                    <button onclick="addRecipeStepRow()" class="add-row-btn">＋ 手順を追加</button>
-                </div>
-                <button id="recipe-submit-btn" onclick="saveRecipe()" class="action-btn save-recipe-btn">レシピを保存</button>
+            <div class="auth-section text-center">
+                <p class="login-desc font-bold mb-10">初めての方はこちら</p>
+                <button onclick="openRegisterModal()" class="action-btn large-action-btn shortcut-btn">新規登録する</button>
             </div>
         </div>
     </div>
 
-    <div id="food-modal" class="modal hidden">
+    <div id="register-modal" class="modal hidden modal-high-z">
         <div class="modal-content small-modal">
             <div class="modal-header">
-                <h3 id="food-modal-title">食材の登録・編集</h3>
-                <span class="close-modal" onclick="closeModal('food-modal')">&times;</span>
+                <h3>新規アカウント登録</h3>
+                <span class="close-modal" onclick="closeModal('register-modal')">&times;</span>
             </div>
             <div class="input-area vertical-input-area">
-                <label class="input-label">食材名</label>
-                <input type="text" id="modal-food-name" placeholder="例: 豚肉">
-                
-                <label class="input-label mt-10">カテゴリ</label>
-                <select id="modal-food-category">
-                    <option value="肉類">肉類</option>
-                    <option value="野菜・果物">野菜・果物</option>
-                    <option value="魚介類">魚介類</option>
-                    <option value="調味料">調味料</option>
-                    <option value="その他">その他</option>
-                </select>
-
-                <label class="input-label mt-10">単位（料理 / 購入）</label>
-                <div class="flex-gap-10">
-                    <select id="modal-cooking-unit" class="flex-1"><option value="">料理用...</option></select>
-                    <select id="modal-shopping-unit" class="flex-1"><option value="">購入用...</option></select>
-                </div>
-                
-                <button id="modal-food-submit-btn" onclick="saveFoodFromModal()" class="action-btn full-width-btn mt-20">登録する</button>
-                <button id="modal-food-delete-btn" onclick="deleteFoodFromModal()" class="action-btn full-width-btn mt-10 danger-btn hidden">削除する</button>
+                <input type="email" id="reg-email" placeholder="メールアドレス" class="full-width-input mb-10">
+                <input type="password" id="reg-password" placeholder="パスワード (6文字以上)" class="full-width-input mb-10">
+                <input type="text" id="reg-nickname" placeholder="表示名 (ニックネーム)" class="full-width-input mb-10">
+                <button onclick="registerWithEmail()" class="action-btn large-action-btn shortcut-btn mt-10">登録してはじめる</button>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <div id="kitchen-screen" class="full-screen-login hidden">
+        <div class="login-card">
+            <h2 class="login-title mb-20">🏠 マイページ</h2>
+
+            <div id="existing-kitchen-section" class="hidden">
+                <p class="login-desc font-bold mb-10 text-center">参加済みのキッチン</p>
+                <div id="existing-kitchen-list" class="vertical-input-area mb-20"></div>
+                <hr class="divider margin-y-20">
+            </div>
+
+            <p class="login-desc mb-10 text-center">新しいキッチンを追加する</p>
+            <div class="mt-10">
+                <input type="text" id="new-family-name" placeholder="新しいキッチン名 (例: 鈴木家)" class="full-width-input mb-10">
+                <button onclick="createNewFamily()" class="action-btn full-width-btn mb-20">✨ 新しくキッチンを作る</button>
+            </div>
+            
+            <div class="input-area vertical-input-area">
+                <input type="text" id="join-family-id" placeholder="招待された合言葉(ID)を入力">
+                <button onclick="joinFamily()" class="action-btn shortcut-btn join-btn full-width-btn">🤝 招待されたキッチンに参加</button>
+            </div>
+            
+            <div class="text-center mt-20">
+                <button onclick="logoutAccount()" class="action-btn secondary-btn full-width-btn">アカウントからログアウト</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="app-main" class="hidden">
+        <header>
+            <div class="header-kitchen-info">
+                <div id="header-family-name" class="header-family-name"></div>
+                <div id="header-family-id" class="header-family-id" onclick="copyFamilyId()" title="クリックしてIDをコピー"></div>
+                <button onclick="returnToMyPage()" class="header-back-btn">🏠 ホームに戻る</button>
+            </div>
+            <nav>
+                <button class="nav-btn active" onclick="switchTab('menu')">献立選択</button>
+                <button class="nav-btn" onclick="switchTab('inventory')">食材管理</button>
+                <button class="nav-btn" onclick="switchTab('shopping')">買い物リスト</button>
+                <button class="nav-btn" onclick="switchTab('cooking')">調理</button>
+                <button class="nav-btn" onclick="switchTab('settings')">管理</button>
+            </nav>
+        </header>
+
+        <main>
+            <section id="menu" class="tab-content active">
+                <div class="header-with-btn">
+                    <h2>献立選択 <button class="info-btn" onclick="openInfoModal('menu')">使い方</button></h2>
+                </div>
+                <div class="action-container mt-10 mb-20 flex-gap-10 flex-center">
+                    <button onclick="openRecipeModal()" class="action-btn large-action-btn flex-1">＋ レシピを追加</button>
+                    <button onclick="openPublicRecipesModal()" class="action-btn large-action-btn flex-1 public-btn">🌐 レシピ広場へ</button>
+                </div>
+                <div id="menu-recipe-list" class="recipe-grid"></div>
+            </section>
+
+            <section id="inventory" class="tab-content">
+                <div class="header-with-btn">
+                    <h2>食材管理（在庫） <button class="info-btn" onclick="openInfoModal('inventory')">使い方</button></h2>
+                </div>
+                <div class="action-container mt-10 mb-20">
+                    <button onclick="openFoodModal()" class="action-btn large-action-btn">＋ 食材を追加</button>
+                </div>
+                <div id="inventory-list"></div>
+            </section>
+
+            <section id="shopping" class="tab-content">
+                <div class="header-with-btn">
+                    <h2>買い物リスト <button class="info-btn" onclick="openInfoModal('shopping')">使い方</button></h2>
+                </div>
+                <ul id="shopping-list-container" class="item-list"></ul>
+                
+                <div id="shopping-complete-container" class="action-container hidden">
+                    <button onclick="completeShopping()" class="action-btn large-action-btn">買い物完了（在庫に追加）</button>
+                </div>
+            </section>
+
+            <section id="cooking" class="tab-content">
+                <div class="header-with-btn">
+                    <h2>調理 <button class="info-btn" onclick="openInfoModal('cooking')">使い方</button></h2>
+                </div>
+                <div id="cooking-recipe-list"></div>
+                
+                <div id="cooking-complete-container" class="action-container hidden">
+                    <div id="cooking-warning-msg" class="warning-msg hidden">※在庫が不足しているため、完了できません。</div>
+                    <button id="cooking-complete-btn" onclick="completeCooking()" class="action-btn large-action-btn danger-btn">調理完了（在庫から消費）</button>
+                </div>
+            </section>
+
+            <section id="settings" class="tab-content">
+                <div class="header-with-btn">
+                    <h2>管理 <button class="info-btn" onclick="openInfoModal('settings')">使い方</button></h2>
+                </div>
+                
+                <div class="settings-group">
+                    <div class="header-with-btn">
+                        <h3>登録済みの単位</h3>
+                        <button id="edit-unit-btn" onclick="toggleUnitEditMode()" class="edit-btn">編集</button>
+                    </div>
+                    <div class="input-area">
+                        <input type="text" id="new-unit-input" placeholder="新しい単位 (例: 個, 束)">
+                        <button onclick="addUnit()" class="action-btn">追加</button>
+                    </div>
+                    <ul id="unit-list" class="tag-list"></ul>
+                </div>
+
+                <hr class="divider">
+
+                <div class="settings-group">
+                    <div class="header-with-btn">
+                        <h3>登録済みレシピ</h3>
+                    </div>
+                    <div class="action-container mt-10 mb-20 flex-gap-10 flex-center">
+                        <button onclick="openRecipeModal()" class="action-btn large-action-btn flex-1">＋ レシピを追加</button>
+                    </div>
+                    <ul id="settings-recipe-list" class="item-list"></ul>
+                </div>
+            </section>
+        </main>
+
+        <div id="info-modal" class="modal hidden">
+            <div class="modal-content small-modal">
+                <div class="modal-header">
+                    <h3 id="info-modal-title">使い方</h3>
+                    <span class="close-modal" onclick="closeModal('info-modal')">&times;</span>
+                </div>
+                <div id="info-modal-body" class="info-modal-body"></div>
+            </div>
+        </div>
+
+        <div id="recipe-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modal-title">レシピの登録</h3>
+                    <span class="close-modal" onclick="closeModal('recipe-modal')">&times;</span>
+                </div>
+                <div class="recipe-form-card">
+                    <input type="text" id="recipe-name-input" placeholder="レシピ名 (例: 肉じゃが)" class="full-width-input">
+                    
+                    <input type="url" id="recipe-url-input" placeholder="参考URL (YouTubeやレシピサイトなど) ※任意" class="full-width-input url-input">
+
+                    <div class="recipe-section">
+                        <h4>材料</h4>
+                        <div id="recipe-ingredients-container"></div>
+                        <button onclick="addRecipeIngredientRow()" class="add-row-btn">＋ 材料を追加</button>
+                    </div>
+                    <div class="recipe-section">
+                        <h4>手順</h4>
+                        <div id="recipe-steps-container"></div>
+                        <button onclick="addRecipeStepRow()" class="add-row-btn">＋ 手順を追加</button>
+                    </div>
+                    <button id="recipe-submit-btn" onclick="saveRecipe()" class="action-btn save-recipe-btn">レシピを保存</button>
+                    
+                    <button id="modal-recipe-delete-btn" onclick="deleteRecipeFromModal()" class="action-btn full-width-btn mt-10 danger-btn hidden">削除する</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="food-modal" class="modal hidden">
+            <div class="modal-content small-modal">
+                <div class="modal-header">
+                    <h3 id="food-modal-title">食材の登録・編集</h3>
+                    <span class="close-modal" onclick="closeModal('food-modal')">&times;</span>
+                </div>
+                <div class="input-area vertical-input-area">
+                    <label class="input-label">食材名</label>
+                    <input type="text" id="modal-food-name" placeholder="例: 豚肉">
+                    
+                    <label class="input-label mt-10">カテゴリ</label>
+                    <select id="modal-food-category">
+                        <option value="肉類">肉類</option>
+                        <option value="野菜・果物">野菜・果物</option>
+                        <option value="魚介類">魚介類</option>
+                        <option value="調味料">調味料</option>
+                        <option value="その他">その他</option>
+                    </select>
+
+                    <label class="input-label mt-10">単位（料理 / 購入）</label>
+                    <div class="flex-gap-10">
+                        <select id="modal-cooking-unit" class="flex-1" onchange="updateConversionText()"><option value="">料理用...</option></select>
+                        <select id="modal-shopping-unit" class="flex-1" onchange="updateConversionText()"><option value="">購入用...</option></select>
+                    </div>
+                    
+                    <label class="input-label mt-10">購入と料理の単位換算（任意）</label>
+                    <div class="flex-gap-10 conversion-container">
+                        <span class="conv-text">1</span>
+                        <span id="conv-shop-unit" class="conv-text-bold">購入単位</span>
+                        <span class="conv-text">＝</span>
+                        <input type="number" id="modal-conversion-rate" class="conv-input" placeholder="例: 8" min="0" step="any">
+                        <span id="conv-cook-unit" class="conv-text-bold">料理単位</span>
+                    </div>
+                    
+                    <button id="modal-food-submit-btn" onclick="saveFoodFromModal()" class="action-btn full-width-btn mt-20">登録する</button>
+                    <button id="modal-food-delete-btn" onclick="deleteFoodFromModal()" class="action-btn full-width-btn mt-10 danger-btn hidden">削除する</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="public-recipe-modal" class="full-page-overlay hidden">
+            <div class="full-page-content">
+                <div class="header-with-btn">
+                    <h2>🌐 レシピ広場</h2>
+                    <span class="close-modal" onclick="closeModal('public-recipe-modal')">&times;</span>
+                </div>
+                <p class="sub-text mb-20">他の人が公開したレシピです。「手元にコピー」を押すと、うちのキッチンで自由に使えるようになります。</p>
+                <div id="public-recipe-list" class="recipe-grid"></div>
+            </div>
+        </div>
+
+    </div> <script type="module" src="script.js"></script>
 </body>
 </html>
