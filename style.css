@@ -1,6 +1,12 @@
 body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 0; background-color: #f8f9fa; color: #333; }
 header { background-color: #ff8c00; position: sticky; top: 0; z-index: 100; }
 
+/* ヘッダーのキッチン情報スタイル（IDクリック機能付き） */
+.header-kitchen-info { text-align: center; padding: 10px 0 5px 0; color: white; position: relative; }
+.header-family-name { font-size: 1.1em; font-weight: bold; margin-bottom: 2px; }
+.header-family-id { font-size: 0.85em; opacity: 0.9; cursor: pointer; display: inline-block; padding: 2px 8px; border-radius: 10px; background-color: rgba(255, 255, 255, 0.2); transition: background-color 0.2s; }
+.header-family-id:hover { background-color: rgba(255, 255, 255, 0.3); }
+
 nav { display: flex; width: 100%; max-width: 800px; margin: 0 auto; overflow-x: auto; }
 nav::-webkit-scrollbar { display: none; }
 .nav-btn { flex: 1; background: none; border: none; color: white; padding: 12px 2px; font-size: 13px; font-weight: bold; cursor: pointer; transition: background-color 0.3s; text-align: center; white-space: nowrap; border-bottom: 4px solid transparent; }
@@ -14,20 +20,25 @@ h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; dis
 
 /* ユーティリティクラス */
 .hidden { display: none !important; }
+.font-bold { font-weight: bold; }
 .sub-text { font-size: 0.9em; color: #666; }
 .text-center { text-align: center; }
 .mt-10 { margin-top: 10px !important; }
 .mt-20 { margin-top: 20px; }
+.mb-10 { margin-bottom: 10px !important; }
 .mb-20 { margin-bottom: 20px; }
+.margin-y-20 { margin: 20px 0; }
 .flex-gap-10 { display: flex; gap: 10px; }
 .flex-1 { flex: 1; }
+.flex-center { justify-content: center; }
 .empty-msg { color: #777; }
 .success-msg { color: #28a745; font-weight: bold; }
 .text-red { color: #dc3545; font-weight: bold; }
 .text-green { color: #28a745; font-weight: bold; }
 
-.info-icon { cursor: pointer; font-size: 20px; margin-left: 10px; transition: transform 0.2s; display: inline-block; }
-.info-icon:hover { transform: scale(1.1); }
+/* 使い方ボタン */
+.info-btn { margin-left: 15px; background-color: #f1f3f5; color: #555; border: 1px solid #ced4da; border-radius: 15px; padding: 4px 12px; font-size: 12px; font-weight: normal; cursor: pointer; transition: all 0.2s; }
+.info-btn:hover { background-color: #e2e6ea; border-color: #adb5bd; }
 
 .settings-group { margin-top: 20px; }
 .header-with-btn { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -41,6 +52,14 @@ h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; dis
 .action-btn { background-color: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 15px; white-space: nowrap; transition: background-color 0.2s; }
 .action-btn:hover:not(:disabled) { background-color: #218838; }
 .action-btn:disabled { background-color: #cccccc !important; cursor: not-allowed; opacity: 0.7; }
+
+/* カラーボタン追加 */
+.public-btn { background-color: #17a2b8; }
+.public-btn:hover:not(:disabled) { background-color: #138496; }
+.secondary-btn { background-color: #6c757d; }
+.secondary-btn:hover:not(:disabled) { background-color: #5a6268; }
+.secondary-btn:disabled { background-color: #6c757d !important; opacity: 1; color: white; cursor: default; }
+
 .shortcut-btn { background-color: #17a2b8; font-size: 14px; padding: 6px 12px; }
 .shortcut-btn:hover { background-color: #138496; }
 .large-action-btn { width: 100%; padding: 15px; font-size: 1.1em; font-weight: bold; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
@@ -70,13 +89,10 @@ h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; dis
 .unit-edit-active .tag-list .unit-delete-btn { display: block; }
 .action-buttons { display: flex; gap: 5px; }
 
-.modify-btn { background-color: #ffc107; color: #212529; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
-.delete-btn { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
-.delete-btn:hover { background-color: #c82333; }
-
 /* レシピフォーム */
 .recipe-form-card { background-color: white; padding: 5px; }
 .full-width-input { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; margin-bottom: 15px; font-weight: bold; }
+.url-input { font-size: 14px; font-weight: normal; background-color: #f8f9fa; border-color: #ddd; margin-top: -5px; } 
 .recipe-section h4 { margin: 0 0 10px 0; color: #ff8c00; font-size: 1em; border-bottom: 1px solid #ffe8cc; padding-bottom: 5px; }
 .recipe-section { margin-bottom: 20px; }
 
@@ -92,15 +108,18 @@ h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; dis
 .save-recipe-btn { width: 100%; padding: 12px; font-size: 16px; background-color: #ff8c00; }
 
 .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; margin-top: 15px; }
-.recipe-card { border: 1px solid #e9ecef; border-radius: 8px; padding: 15px; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.2s; position: relative; }
+.recipe-card { border: 1px solid #e9ecef; border-radius: 8px; padding: 15px; background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.2s; position: relative; display: flex; flex-direction: column; }
 .recipe-card.selected { border: 2px solid #ff8c00; background-color: #fff8f0; }
 .recipe-card h3 { margin: 0 0 10px 0; color: #333; font-size: 1.2em; }
-.recipe-card-meta { font-size: 13px; color: #666; }
+.recipe-card-meta { font-size: 13px; color: #666; flex-grow: 1; }
 .selection-indicator { margin-top: 10px; text-align: right; font-weight: bold; font-size: 13px; color: #aaa; }
 .recipe-card.selected .selection-indicator { color: #ff8c00; }
 .cookable-badge { display: inline-block; background-color: #28a745; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-bottom: 10px; }
 
-/* モーダル・コンテナ制御用 */
+.reference-link { display: inline-block; margin-top: 5px; font-size: 12px; color: #0066cc; text-decoration: none; word-break: break-all; }
+.reference-link:hover { text-decoration: underline; color: #004499; }
+
+/* モーダル制御用 */
 .action-container { text-align: center; }
 .warning-msg { color: #dc3545; font-weight: bold; margin-bottom: 10px; font-size: 13px; }
 .modal { display: flex; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center; }
@@ -110,6 +129,7 @@ h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; dis
 .modal-header h3 { margin: 0; color: #ff8c00; }
 .close-modal { font-size: 28px; font-weight: bold; color: #aaa; cursor: pointer; line-height: 1; }
 .info-modal-body { line-height: 1.6; color: #444; font-size: 14px; }
+.modal-high-z { z-index: 4000; } 
 
 /* カテゴリ別 食材管理 */
 .category-details { background: white; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e9ecef; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
@@ -148,3 +168,61 @@ h2 { border-bottom: 2px solid #ff8c00; padding-bottom: 10px; color: #ff8c00; dis
 .cooking-recipe-card h3 { color: #ff8c00; border-bottom: 2px solid #ffcca3; padding-bottom: 5px; margin-top: 0; }
 .cooking-ingredients { list-style-type: disc; padding-left: 20px; margin-bottom: 15px; }
 .cooking-steps { padding-left: 20px; line-height: 1.6; }
+
+/* 単位換算モーダル */
+.conversion-container { align-items: center; background-color: #f8f9fa; padding: 10px; border-radius: 4px; border: 1px solid #e9ecef; }
+.conv-text { font-size: 14px; }
+.conv-text-bold { font-size: 14px; font-weight: bold; }
+.input-area .conv-input { flex: none; min-width: auto; width: 60px; padding: 5px; }
+
+/* === ログイン画面・マイページ用のスタイル === */
+.full-screen-login {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #f8f9fa;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+}
+.login-card { background-color: white; padding: 30px 20px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; margin: auto; }
+.login-title { justify-content: center; border: none; }
+.login-desc { font-size: 14px; color: #555; }
+.join-btn { background-color: #17a2b8; }
+.auth-section { width: 100%; }
+
+/* === 全画面オーバーレイ（広場用）のスタイル === */
+.full-page-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #f8f9fa;
+    z-index: 2000;
+    overflow-y: auto;
+}
+.full-page-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.header-back-btn {
+    display: inline-block; /* 中央寄せのために変更 */
+    margin-top: 8px;       /* IDとの間に少し余白をあける */
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 12px;      /* 少し控えめなサイズに調整 */
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.header-back-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
