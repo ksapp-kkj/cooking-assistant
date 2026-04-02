@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>料理アシスタント</title>
     <link rel="stylesheet" href="style.css">
-
+    
     <link rel="icon" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
 </head>
@@ -85,13 +85,6 @@
                 <div id="header-family-id" class="header-family-id" onclick="copyFamilyId()" title="クリックしてIDをコピー"></div>
                 <button onclick="returnToMyPage()" class="header-back-btn">🏠 ホームに戻る</button>
             </div>
-            <nav>
-                <button class="nav-btn active" onclick="switchTab('menu')">献立選択</button>
-                <button class="nav-btn" onclick="switchTab('inventory')">食材管理</button>
-                <button class="nav-btn" onclick="switchTab('shopping')">買い物リスト</button>
-                <button class="nav-btn" onclick="switchTab('cooking')">調理</button>
-                <button class="nav-btn" onclick="switchTab('settings')">管理</button>
-            </nav>
         </header>
 
         <main>
@@ -169,6 +162,29 @@
                 </div>
             </section>
         </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn active" onclick="switchTab('menu')">
+                <span class="nav-icon">🍽️</span>
+                <span class="nav-text">献立</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('inventory')">
+                <span class="nav-icon">📦</span>
+                <span class="nav-text">在庫</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('shopping')">
+                <span class="nav-icon">🛒</span>
+                <span class="nav-text">買物</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('cooking')">
+                <span class="nav-icon">🍳</span>
+                <span class="nav-text">調理</span>
+            </button>
+            <button class="nav-btn" onclick="switchTab('settings')">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">管理</span>
+            </button>
+        </nav>
 
         <div id="info-modal" class="modal hidden">
             <div class="modal-content small-modal">
