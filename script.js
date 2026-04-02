@@ -166,6 +166,9 @@ async function enterKitchen(fId, fName) {
     document.getElementById('header-family-id').textContent = currentFamilyId;
     document.getElementById('header-family-name').textContent = currentFamilyName; 
     
+    // ▼ 追加: テキストをセットした直後にサイズを自動調整する ▼
+    fitKitchenName();
+    
     await loadDataFromFirebase();
 }
 
@@ -976,3 +979,22 @@ window.loadRecipeToForm = loadRecipeToForm;
 window.deleteRecipeFromModal = deleteRecipeFromModal;
 window.openPublicRecipesModal = openPublicRecipesModal;
 window.copyPublicRecipe = copyPublicRecipe;
+
+// === キッチン名を枠内に自動縮小して収める機能（エクセル的な動き） ===
+function fitKitchenName() {
+    const el = document.getElementById('header-family-name');
+    if (!el) return;
+    
+    // 一旦リセットして本来の文字幅を計算
+    el.style.transform = 'none';
+    const parentWidth = el.parentElement.clientWidth - 20; // 左右10pxずつの余裕
+    const textWidth = el.scrollWidth;
+    
+    // 文字幅が枠を超えている場合、超えた比率だけ全体を縮小(scale)する
+    if (textWidth > parentWidth && parentWidth > 0) {
+        const scale = parentWidth / textWidth;
+        el.style.transform = `scale(${scale})`;
+    }
+}
+// 画面サイズ（スマホの縦横など）が変わった時にも自動計算する
+window.addEventListener('resize', fitKitchenName);
